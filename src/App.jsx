@@ -1,35 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useRef, useState } from 'react'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const reference = useRef(null)
+  const sources = [
+    'https://vjs.zencdn.net/v/oceans.mp4',
+    'https://lamberta.github.io/html5-animation/examples/ch04/assets/movieclip.mp4',
+  ]
+
+  console.log('- rerendered')
 
   return (
     <>
+      <video ref={reference} autoPlay controls width={500} />
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <button onClick={() => (reference.current.src = sources[0])}>전환 1</button>
+        <button onClick={() => (reference.current.src = sources[1])}>전환 2</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
-
 export default App
