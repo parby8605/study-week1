@@ -1,8 +1,8 @@
-import { useRef, useState } from 'react'
+import { forwardRef, useRef, useState } from 'react'
 import '@/App.css'
 
-//TypeScript 사용해서 props 타입 지정해주면 lint 메시지 해결 가능
-function FormWithValidation({ label, required = false, length = undefined }, ref) {
+// eslint-disable-next-line react/display-name
+const FormWithValidation = forwardRef(({ label, required = false, length = undefined }, ref) => {
   const [requiredValid, setRequiredValid] = useState(true)
   const [lengthValid, setLengthValid] = useState(true)
 
@@ -23,7 +23,7 @@ function FormWithValidation({ label, required = false, length = undefined }, ref
       {requiredValid || <div style={{ color: 'red' }}>{label}은 필수 입력값입니다.</div>}
     </>
   )
-}
+})
 
 function App() {
   const references = {
