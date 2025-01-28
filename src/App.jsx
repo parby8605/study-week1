@@ -13,7 +13,33 @@ function UsernameInput({ nameRef }) {
   )
 }
 
-function PasswordInput({ inputRef, valid, validate }) {
+const useSingularForm = () => {
+  const ref = useRef(null)
+
+  const [valid, setValid] = useState({
+    maximum: true,
+    minimum: true,
+    required: true,
+  })
+
+  const passwordValidate = (input) => {
+    const changed = produce(valid, (draft) => {
+      draft.maximum = input.length <= 10
+      draft.minimum = input.length > 5
+      draft.required = input.length > 0
+    })
+    setValid(changed)
+  }
+
+  const error = {}
+  if (valid.maximum === false) error.maximum = '비밀번호는 10글자를 넘을 수 없습니다.'
+  if (valid.minimum === false) error.minimum = '비밀번호는 5글자를 넘어야합니다.'
+  if (valid.required === false) error.required = '비밀번호를 입력해주세요.'
+
+  return { ref, passwordValidate, error }
+}
+
+function PasswordInput({ inputRef, error, validate }) {
   const changeMod = (e) => {
     if (inputRef.current.type === 'password') {
       inputRef.current.type = 'text'
@@ -30,30 +56,20 @@ function PasswordInput({ inputRef, valid, validate }) {
         <input type='password' ref={inputRef} onChange={(e) => validate(e.target.value)} />
       </div>
       <button onClick={changeMod}>🔓 보이기</button>
-      {valid.maximum || <div style={{ color: 'red' }}>비밀번호는 10글자를 넘을 수 없습니다.</div>}
-      {valid.minimum || <div style={{ color: 'red' }}>비밀번호는 5글자를 넘어야합니다.</div>}
-      {valid.required || <div style={{ color: 'red' }}>비밀번호를 입력해주세요.</div>}
+      <div style={{ color: 'red' }}>{error.maximum}</div>
+      <div style={{ color: 'red' }}>{error.minimum}</div>
+      <div style={{ color: 'red' }}>{error.required}</div>
     </div>
   )
 }
 
 function App() {
-  const [valid, setValid] = useState({
-    maximum: true,
-    minimum: true,
-    required: true,
-  })
   const nameRef = useRef(null)
-  const passwordRef = useRef(null)
-
-  const passwordValidate = (input) => {
-    const changed = produce(valid, (draft) => {
-      draft.maximum = input.length <= 10
-      draft.minimum = input.length > 5
-      draft.required = input.length > 0
-    })
-    setValid(changed)
-  }
+  const {
+    ref: passwordRef,
+    passwordValidate: passwordValidate,
+    error: passwordError,
+  } = useSingularForm()
 
   const registration = () => {
     const request = {
@@ -67,7 +83,7 @@ function App() {
   return (
     <section style={{ textAlign: 'start', width: 400 }}>
       <UsernameInput nameRef={nameRef} />
-      <PasswordInput inputRef={passwordRef} valid={valid} validate={passwordValidate} />
+      <PasswordInput inputRef={passwordRef} error={passwordError} validate={passwordValidate} />
       <button onClick={registration}>회원가입 완료</button>
     </section>
   )
