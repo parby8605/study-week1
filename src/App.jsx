@@ -1,34 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useRef, useState } from 'react'
+
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function UsernameInput() {
   return (
     <>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        Username: <input />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
+  )
+}
+
+function PasswordInput() {
+  const ref = useRef(null)
+
+  const changeMod = (e) => {
+    if (ref.current.type === 'password') {
+      ref.current.type = 'text'
+      e.currentTarget.innerText = '🔒 감추기'
+    } else if (ref.current.type === 'text') {
+      ref.current.type = 'password'
+      e.currentTarget.innerText = '🔓 보이기'
+    }
+  }
+  return (
+    <>
+      <div>
+        Password : <input type='password' ref={ref} />
+      </div>
+      <button onClick={changeMod}>🔓 보이기</button>
+    </>
+  )
+}
+
+function App() {
+  function registration() {}
+
+  return (
+    <section style={{ textAlign: 'start', width: 400 }}>
+      <UsernameInput />
+      <PasswordInput />
+      <button onClick={registration}>회원가입 완료</button>
+    </section>
   )
 }
 
