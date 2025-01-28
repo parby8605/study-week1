@@ -4,14 +4,19 @@ import './App.css'
 
 function App() {
   const [level, setLevel] = useState(1)
-  const [title, setTitle] = useState('Novice')
+  // const [title, setTitle] = useState('Novice')
 
-  useEffect(() => {
-    if (level >= 15 && level < 30) {
-      setTitle('1차전직')
-    } else if (level >= 30) {
-      setTitle('2차전직')
-    }
+  // useEffect(() => {
+  //   if (level >= 15 && level < 30) {
+  //     setTitle('1차전직')
+  //   } else if (level >= 30) {
+  //     setTitle('2차전직')
+  //   }
+  // }, [level])
+  const title = useMemo(() => {
+    if (level >= 30) return '2차전직'
+    if (level >= 15) return '1차전직'
+    return 'Novice'
   }, [level])
 
   const levelUp_1 = () => {
