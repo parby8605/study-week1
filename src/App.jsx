@@ -20,7 +20,7 @@ function App() {
   }
 
   const decreaseAge = () => {
-    setAge((prev) => prev - 1)
+    setAge((prev) => (prev > 0 ? prev - 1 : 0))
     setValid((prev) => Number(age) - 1 >= 19)
   }
 
