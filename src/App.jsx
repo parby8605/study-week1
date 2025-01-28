@@ -13,6 +13,9 @@ function UsernameInput() {
 }
 
 function PasswordInput() {
+  const [maximumValid, setMaximumValid] = useState(true)
+  const [minimumValid, setMinimumValid] = useState(true)
+  const [requiredValid, setRequiredValid] = useState(true)
   const ref = useRef(null)
 
   const changeMod = (e) => {
@@ -27,9 +30,22 @@ function PasswordInput() {
   return (
     <>
       <div>
-        Password : <input type='password' ref={ref} />
+        Password :{' '}
+        <input
+          type='password'
+          ref={ref}
+          onChange={(e) => {
+            const input = e.currentTarget.value
+            setMaximumValid(input.length <= 10)
+            setMinimumValid(input.length > 5)
+            setRequiredValid(input.length > 0)
+          }}
+        />
       </div>
       <button onClick={changeMod}>🔓 보이기</button>
+      {maximumValid || <div style={{ color: 'red' }}>비밀번호는 10글자를 넘을 수 없습니다.</div>}
+      {minimumValid || <div style={{ color: 'red' }}>비밀번호는 5글자를 넘어야합니다.</div>}
+      {requiredValid || <div style={{ color: 'red' }}>비밀번호를 입력해주세요.</div>}
     </>
   )
 }
