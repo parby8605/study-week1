@@ -1,33 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useRef, useState } from 'react'
+import '@/App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+//TypeScript 사용해서 props 타입 지정해주면 lint 메시지 해결 가능
+function FormWithValidation({ label, required = false, length = undefined }, ref) {
+  const [requiredValid, setRequiredValid] = useState(true)
+  const [lengthValid, setLengthValid] = useState(true)
 
+  console.log('- rerendered : ' + label)
   return (
     <>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        {label} :{' '}
+        <input
+          ref={ref}
+          onChange={(e) => {
+            if (required) setRequiredValid(e.currentTarget.value.length !== 0)
+            if (length) setLengthValid(e.currentTarget.value.length <= length)
+          }}
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {lengthValid || <div style={{ color: 'red' }}>{label}의 길이는 10를 넘어선 안됩니다.</div>}
+      {requiredValid || <div style={{ color: 'red' }}>{label}은 필수 입력값입니다.</div>}
+    </>
+  )
+}
+
+function App() {
+  const references = {
+    name: useRef(),
+    desc: useRef(),
+    mail: useRef(),
+  }
+
+  function submit() {
+    console.log({
+      name: references?.name?.current?.value,
+      desc: references?.desc?.current?.value,
+      mail: references?.mail?.current?.value,
+    })
+  }
+
+  console.log('- rerendered')
+  return (
+    <>
+      <FormWithValidation ref={references.name} label='이름' required />
+      <FormWithValidation ref={references.desc} label='설명' length={10} />
+      <FormWithValidation ref={references.mail} label='메일' required />
+      <button onClick={submit}>제출</button>
     </>
   )
 }
