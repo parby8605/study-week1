@@ -5,22 +5,23 @@ import './App.css'
 function App() {
   const [products, setProducts] = useState([])
   const [category, setCategory] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('전체')
   const [filteredProducts, setFilteredProducts] = useState([])
   useEffect(() => {
-    const product = async () => {
+    const fetchProduct = async () => {
       const res = await fetch('https://fakestoreapi.com/products')
       const data = res.json()
       return data
     }
-    const category = async () => {
+    const fetchCategory = async () => {
       const res = await fetch('https://fakestoreapi.com/products/categories')
       const data = res.json()
       return data
     }
 
-    product().then((res) => setProducts(res))
-    category().then((res) => setCategory(res))
+    fetchProduct().then((res) => setProducts(res))
+    fetchCategory().then((res) => setCategory(res))
+    setFilteredProducts(products)
   }, [])
 
   useEffect(() => {
@@ -35,7 +36,7 @@ function App() {
       return data
     }
     product().then((res) => setFilteredProducts(res))
-  }, [selectedCategory])
+  }, [selectedCategory, products])
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
