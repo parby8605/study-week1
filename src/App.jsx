@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 
 import './App.css'
 
@@ -20,12 +20,15 @@ function App() {
     return age >= 19 ? true : false
   }
   const valid = useMemo(() => validate(), [age >= 19])
+  const handleClick = useCallback(() => {
+    setAge((prev) => prev + 1)
+  }, [])
 
   return (
     <>
       <p>{age}</p>
       <Validation valid={valid}></Validation>
-      <Button onClick={() => setAge(age + 1)}>증가</Button>
+      <Button onClick={handleClick}></Button>
     </>
   )
 }
