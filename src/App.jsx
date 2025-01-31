@@ -11,12 +11,17 @@ function LC() {
   )
 }
 
+/*
+ * Consumer는 자신만의 독립적인 렌더링 범위(scope)를 만든다
+ * Consumer의 자식으로 전달되는 함수는 부모 컴포넌트의 렌더링 사이클과 분리되어 실행
+ * 이러한 이유때문에 디버깅이 어려움움
+ */
 function TC() {
   console.log('- A.3. Third Component')
-  const { count } = useContext(CreatedContext)
   return (
     <div className='component-box' style={{ padding: 10 }}>
-      Third Component : {count}
+      Third Component :{' '}
+      <CreatedContext.Consumer>{({ count }) => <>{count}</>}</CreatedContext.Consumer>
       <LC />
     </div>
   )
@@ -43,13 +48,14 @@ function FC() {
 }
 
 function ButtonComponent() {
-  const { setCount } = useContext(CreatedContext)
   console.log('- B. Button Component')
   return (
     <div className='component-box' style={{ padding: 10 }}>
       Button Component
       <div>
-        <button onClick={() => setCount((prev) => prev + 1)}>증가</button>
+        <CreatedContext.Consumer>
+          {({ setCount }) => <button onClick={() => setCount((prev) => prev + 1)}>증가</button>}
+        </CreatedContext.Consumer>
       </div>
     </div>
   )
