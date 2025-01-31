@@ -1,10 +1,98 @@
-import { useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 
 import './App.css'
 
+function LC() {
+  console.log('- A.4. Fourth Component')
+  return (
+    <div className='component-box' style={{ padding: 10 }}>
+      Fourth Component
+    </div>
+  )
+}
+
+function TC() {
+  console.log('- A.3. Third Component')
+  const { count } = useContext(CreatedContext)
+  return (
+    <div className='component-box' style={{ padding: 10 }}>
+      Third Component : {count}
+      <LC />
+    </div>
+  )
+}
+
+function SC() {
+  console.log('- A.2. Second Component')
+  return (
+    <div className='component-box' style={{ padding: 10 }}>
+      Second Component
+      <TC />
+    </div>
+  )
+}
+
+function FC() {
+  console.log('- A.1. First Component')
+  return (
+    <div className='component-box' style={{ padding: 10 }}>
+      First Component
+      <SC />
+    </div>
+  )
+}
+
+function ButtonComponent() {
+  const { setCount } = useContext(CreatedContext)
+  console.log('- B. Button Component')
+  return (
+    <div className='component-box' style={{ padding: 10 }}>
+      Button Component
+      <div>
+        <button onClick={() => setCount((prev) => prev + 1)}>증가</button>
+      </div>
+    </div>
+  )
+}
+
+function NonContextComponent() {
+  const { count } = useContext(CreatedContext)
+  console.log('- C. Non-Context Component')
+  return (
+    <div className='component-box' style={{ padding: 10 }}>
+      Non-Context Component : {count}
+    </div>
+  )
+}
+
+const defaultValue = -10
+const CreatedContext = createContext({ count: defaultValue, setCount: (state) => {} })
+
+function CreatedContextProvider({ children }) {
+  const [count, setCount] = useState(0)
+
+  return <CreatedContext.Provider value={{ count, setCount }}>{children}</CreatedContext.Provider>
+}
+
 function App() {
-  //week1 day 완
-  return <></>
+  return (
+    <div
+      className='section-box'
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 16,
+        padding: 10,
+      }}
+    >
+      <CreatedContextProvider>
+        <FC />
+        <ButtonComponent />
+      </CreatedContextProvider>
+      <NonContextComponent />
+    </div>
+  )
 }
 
 export default App
