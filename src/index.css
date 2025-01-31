@@ -30,6 +30,12 @@ body {
   min-height: 100vh;
 }
 
+body.dark {
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
