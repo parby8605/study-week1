@@ -42,7 +42,7 @@ const useProducts = () => {
   return { category, filteredProducts, selectedCategory, setSelectedCategory }
 }
 
-function App() {
+function DisplayProduct() {
   const { category, filteredProducts, selectedCategory, setSelectedCategory } = useProducts()
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -66,6 +66,10 @@ function App() {
       ))}
     </div>
   )
+}
+
+function App() {
+  return <DisplayProduct />
 }
 
 export default App
