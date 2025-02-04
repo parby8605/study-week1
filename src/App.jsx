@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react'
 
 import './App.css'
 
-function App() {
+const useProducts = () => {
   const [products, setProducts] = useState([])
   const [category, setCategory] = useState([])
   const [selectedCategory, setSelectedCategory] = useState('전체')
   const [filteredProducts, setFilteredProducts] = useState([])
+
   useEffect(() => {
     const fetchProduct = async () => {
       const res = await fetch('https://fakestoreapi.com/products')
@@ -38,6 +39,11 @@ function App() {
     product().then((res) => setFilteredProducts(res))
   }, [selectedCategory, products])
 
+  return { category, filteredProducts, selectedCategory, setSelectedCategory }
+}
+
+function App() {
+  const { category, filteredProducts, selectedCategory, setSelectedCategory } = useProducts()
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <div>
